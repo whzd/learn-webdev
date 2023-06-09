@@ -1,0 +1,40 @@
+#introduction{
+    background-image: url('../images/architecture_facade.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+}
+
+#introduction img {
+    height: 250px;
+    border-radius: 20%;
+}
+
+#footer {
+    background-color: grey;
+}
+
+.project1 {
+    background-image: url('../images/dns.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+}
+
+.project2 {
+    background-image: url('../images/autoscaling.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+}
+
+.project3 {
+    background-image: url('../images/neutral-network.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+}
