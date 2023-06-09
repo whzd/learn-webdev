@@ -12,7 +12,15 @@
 }
 
 #footer {
-    background-color: grey;
+    background-color: #292b2c;
+    position: absolute;
+    width: 100%;
+}
+
+.icon-square {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
 }
 
 .project1 {
