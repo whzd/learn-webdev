@@ -3,6 +3,9 @@ const readline = require("readline").createInterface({
     output: process.stdout
 });
 readline.question('What is your message?\n', text => {
-    console.log('You have written ' + text.length + 'characters, you have ' + (140 - text.length) + 'characters left.');
+    // strings slice
+    console.log("Your message:\n" + text.slice(0,140))
+    // strings length
+    console.log('You have written ' + text.length + 'characters, your limit is 140 characters.');
     readline.close();
 });
