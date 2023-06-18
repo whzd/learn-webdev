@@ -1,6 +1,13 @@
 function calculateLove(name1, name2){
-    return Math.floor((Math.random()*100) + 1)
+    const score =  Math.floor((Math.random()*100) + 1)
+    if (score > 70){
+        console.log("Your love score is " + score + "%.\nYou love each other like Kanye loves Kanye.");
+    }else if (score > 30){
+        console.log("Your love score is " + score + "%.");
+    }else{
+        console.log("Your love score is " + score + "%.\nYou go together like oil and water.");
+    }
 }
 
-console.log(calculateLove("eu", "tu"));
+calculateLove("eu", "tu");
 
