@@ -2,12 +2,14 @@ let buttons = document.querySelectorAll(".drum");
 for (let index = 0; index < buttons.length; index++) {
     buttons[index].addEventListener("click", function () {
         keyToSound(this.innerText);
+        addAnimation(this.innerText);
 
     });
 }
 
 document.addEventListener("keydown", function(event){
     keyToSound(event.key);
+    addAnimation(event.key);
 });
 
 function keyToSound(key) {
@@ -47,3 +49,10 @@ function keyToSound(key) {
     }
 }
 
+
+function addAnimation(key){
+    document.querySelector("." + key).classList.toggle("pressed");
+    setTimeout(function(){
+    document.querySelector("." + key).classList.toggle("pressed");
+    },100);
+}
