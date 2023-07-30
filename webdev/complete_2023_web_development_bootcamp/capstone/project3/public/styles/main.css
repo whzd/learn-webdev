@@ -1,0 +1,32 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    min-height: 95hv;
+}
+
+#heading {
+    background-color: blue;
+}
+
+.box {
+    margin: 50px auto;
+    border-radius: 5px;
+    background-color: green;
+    text-align: center;
+}
+
+.item {
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    padding-right: 20px;
+}
+
+input[type="checkbox"] {
+    margin: 20px;
+}
+
+p {
+    font-size: 20px;
+}
