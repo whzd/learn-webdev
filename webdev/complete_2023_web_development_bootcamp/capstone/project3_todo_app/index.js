@@ -25,15 +25,24 @@ function getCurrentDate() {
     }
 }
 
+var tasks = [];
+
 app.get("/", (req, res) => {
-    res.render("index.ejs", getCurrentDate());
+    var data = {
+        date: getCurrentDate(),
+        tasks: tasks
+    }
+    res.render("index.ejs", data);
 });
 
 app.get("/work", (req, res) => {
     res.render("work.ejs");
 });
 
-app.post("/submit", (req, res) => {
+app.post("/", (req, res) => {
+    if(req.body.newTask){
+        tasks.push(req.body.newTask)
+    }
     var data = {
         date: getCurrentDate(),
         tasks: tasks
@@ -45,5 +54,4 @@ app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
 
-var tasks = [];
 
