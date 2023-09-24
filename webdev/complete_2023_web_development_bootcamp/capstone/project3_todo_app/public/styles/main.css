@@ -3,16 +3,18 @@ body {
     flex-direction: column;
     justify-content: stretch;
     min-height: 95hv;
+    background-color: #053B50;
 }
 
 #heading {
-    background-color: blue;
+    background-color: #176B87;
+    color: #EEEEEE;
 }
 
 .box {
     margin: 50px auto;
     border-radius: 5px;
-    background-color: green;
+    background-color: #64CCC5;
     text-align: center;
 }
 
@@ -29,4 +31,12 @@ input[type="checkbox"] {
 
 p {
     font-size: 20px;
+}
+
+a{
+    color: #EEEEEE;
+}
+
+footer {
+    color: #EEEEEE;
 }

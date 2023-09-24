@@ -1,0 +1,19 @@
+<%- include("partials/header.ejs") %>
+    <div id="heading" class="box">Work List</div>
+    <div class="box">
+        <% tasks.forEach((task) => { %>
+            <div class="item">
+                <input type="checkbox">
+                <p><%= task %><p>
+            </div>
+            <hr>
+        <% }) %>
+        <div class="input">
+            <form action="/work" method="POST">
+                <input type="text" name="newTask" placeholder="New Item" autocomplete="off">
+                <button type="submit">+</button>
+            </form>
+
+        </div>
+    </div>
+<%- include("partials/footer.ejs") %>

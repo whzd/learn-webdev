@@ -25,27 +25,43 @@ function getCurrentDate() {
     }
 }
 
-var tasks = [];
+var dailyTasks = [];
+var workTasks = [];
 
 app.get("/", (req, res) => {
     var data = {
         date: getCurrentDate(),
-        tasks: tasks
+        tasks: dailyTasks
     }
     res.render("index.ejs", data);
 });
 
 app.get("/work", (req, res) => {
-    res.render("work.ejs");
+    var data = {
+        date: getCurrentDate(),
+        tasks: workTasks
+    }
+    res.render("work.ejs", data);
 });
 
 app.post("/", (req, res) => {
     if(req.body.newTask){
-        tasks.push(req.body.newTask)
+        dailyTasks.push(req.body.newTask)
     }
     var data = {
         date: getCurrentDate(),
-        tasks: tasks
+        tasks: dailyTasks
+    }
+    res.render("index.ejs", data);
+});
+
+app.post("/work", (req, res) => {
+    if(req.body.newTask){
+        workTasks.push(req.body.newTask)
+    }
+    var data = {
+        date: getCurrentDate(),
+        tasks: workTasks
     }
     res.render("index.ejs", data);
 });
