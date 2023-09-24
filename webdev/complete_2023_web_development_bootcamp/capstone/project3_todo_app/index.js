@@ -63,7 +63,7 @@ app.post("/work", (req, res) => {
         date: getCurrentDate(),
         tasks: workTasks
     }
-    res.render("index.ejs", data);
+    res.render("work.ejs", data);
 });
 
 app.listen(port, () => {

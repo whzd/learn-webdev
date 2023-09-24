@@ -1,9 +1,33 @@
+body{
+    background-color: #053B50;
+}
+
+h1 {
+    padding: 10px;
+}
+
+p {
+    font-size: 20px;
+}
+
+a{
+    color: #EEEEEE;
+}
+
+footer {
+    color: #EEEEEE;
+    text-align: center;
+}
+
+header {
+    text-align: center;
+}
+
 body {
     display: flex;
     flex-direction: column;
     justify-content: stretch;
     min-height: 95hv;
-    background-color: #053B50;
 }
 
 #heading {
@@ -16,6 +40,7 @@ body {
     border-radius: 5px;
     background-color: #64CCC5;
     text-align: center;
+    max-width: 400px;
 }
 
 .item {
@@ -29,14 +54,24 @@ input[type="checkbox"] {
     margin: 20px;
 }
 
-p {
+input[type="text"]{
+    border: none;
+    background: transparent;
+    text-align: center;
     font-size: 20px;
+    height: 60px;
 }
 
-a{
+button {
+    min-height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: #176B87;
     color: #EEEEEE;
+    font-size: 30px;
+    border-width: 0;
 }
 
-footer {
-    color: #EEEEEE;
+form {
+    margin-left: 20px;
 }
