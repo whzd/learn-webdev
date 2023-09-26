@@ -1,9 +1,27 @@
+html{
+    font-family: 'Mooli', sans-serif;
+}
+
 body{
     background-color: #053B50;
 }
 
 h1 {
     padding: 10px;
+    font-size: 29px;
+}
+
+h3 {
+    word-spacing: 50px;
+}
+
+@media (max-width: 575px) {
+    h3 {
+        word-spacing: normal;
+    }
+    input[type="text"]{
+        text-align: left;
+    }
 }
 
 p {
@@ -12,6 +30,8 @@ p {
 
 a{
     color: #EEEEEE;
+    text-decoration: none;
+    word-spacing: normal;
 }
 
 footer {
@@ -52,6 +72,11 @@ body {
 
 input[type="checkbox"] {
     margin: 20px;
+    accent-color: #176B87;
+}
+
+input[type="checkbox"]:checked + p.strikethrough{
+    text-decoration: line-through;
 }
 
 input[type="text"]{
