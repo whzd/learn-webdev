@@ -12,19 +12,19 @@ h1 {
 }
 
 h2 {
-  color: #FFE6C7;
+  color: #FFA559;
   text-align: center;
 }
 
 .mission {
   display: inline-flex;
-  background-color: #FFA559;
+  background-color: #FFE6C7;
   padding: 3px;
   position: relative;
   border-radius: 6px;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: #454545;
 }
 
 .mission h3 {
@@ -37,7 +37,6 @@ h2 {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: #FFE6C7;
   padding: 3px;
   position: relative;
   border-radius: 6px;

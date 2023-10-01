@@ -15,11 +15,9 @@
       <div class="info">
         <h3><%- data.missionName %></h3>
         <ul>
-          <li>Agency: <%- data.agencyName %></li>
-          <li>Country: <%- data.agencyCountryCode%></li>
-          <li>Type: <%- data.missionType %></li>
-          <li>Description: <%- data.missionDescription %></li>
-          <li>Orbit: <%- data.missionOrbit %></li>
+          <li><%- data.missionDescription %></li>
+          <li><%- data.agencyName %>, <%- data.agencyCountryCode%></li>
+          <li><%- data.missionType %> mission, going to <%- data.missionOrbit %></li>
           <li>Status: <%- data.status %></li>
         </ul>
       </div>
