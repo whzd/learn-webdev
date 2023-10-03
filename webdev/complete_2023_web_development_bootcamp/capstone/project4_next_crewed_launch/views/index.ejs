@@ -4,22 +4,31 @@
 <head>
   <title>People Go To Space</title>
   <link rel="stylesheet" type="text/css" href="styles/main.css">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mooli&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <h1><%- data.launchName %></h1>
-    <h2>Expected Launch Date: <%- data.day %></h2>
+    <h2>Launch Date: <%- data.day %></h2>
     <div class="mission">
       <img src="<%- data.agencyLogo%>" alt="Agency Logo">
       <div class="info">
         <h3><%- data.missionName %></h3>
         <ul>
           <li><%- data.missionDescription %></li>
-          <li><%- data.agencyName %>, <%- data.agencyCountryCode%></li>
           <li><%- data.missionType %> mission, going to <%- data.missionOrbit %></li>
-          <li>Status: <%- data.status %></li>
+          <li><%- data.agencyName %>, <%- data.agencyCountryCode%></li>
         </ul>
+          <% if (data.status === "TBD") { %>
+            <h4 class="red"><%- data.status %></h4>
+          <% } else if (data.status === "TBC") { %>
+            <h4 class="orange"><%- data.status %></h4>
+          <% } else if (data.status === "GO") { %>
+            <h4 class="green"><%- data.status %></h4>
+          <% } %>
+
       </div>
     </div>
     <% if (data.agencyImage) { %>
