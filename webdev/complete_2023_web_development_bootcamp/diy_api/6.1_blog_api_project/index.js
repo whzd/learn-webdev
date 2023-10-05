@@ -47,7 +47,9 @@ app.get("/posts", (req, res) => {
 
 //CHALLENGE 2: GET a specific post by id
 app.get("/posts/:id", (req, res) => {
-  res.json(posts.find(post => post.id === parseInt(req.params.id)))
+  const post = posts.find(post => post.id === parseInt(req.params.id))
+  if (!post) return res.status(404).json({error: "Post not found."})
+  res.json(post)
 })
 
 //CHALLENGE 3: POST a new post
@@ -61,12 +63,13 @@ app.post("/posts", (req, res) => {
   }
   posts.push(newPost)
   lastId += 1
-  res.json(posts[lastId - 1])
+  res.status(201).json(posts[lastId - 1])
 })
 
 //CHALLENGE 4: PATCH a post when you just want to update one parameter
 app.patch("/posts/:id", (req, res) => {
-  const foundPost = posts.find(post => post.id === parseInt(req.params.id))
+  const post = posts.find(post => post.id === parseInt(req.params.id))
+  if (!post) return res.status(404).json({error: "Post not found."})
   const updatedPost = {
     id: foundPost.id,
     title: req.body.title || foundPost.title,
@@ -81,12 +84,9 @@ app.patch("/posts/:id", (req, res) => {
 //CHALLENGE 5: DELETE a specific post by providing the post id.
 app.delete("/posts/:id", (req, res) => {
   const foundPostIndex = posts.findIndex(post => post.id === parseInt(req.params.id))
-  if (foundPostIndex > -1){
-    posts.splice(foundPostIndex, 1)
-    res.sendStatus(200)
-  } else {
-    res.status(404).json({ error: `No post found with the id ${parseInt(req.params.id)}. Nothing was deleted.`})
-  }
+  if (foundPostIndex === -1) return res.status(404).json({ error: "Post not found"})
+  posts.splice(foundPostIndex, 1)
+  res.sendStatus(200)
 })
 
 app.listen(port, () => {
