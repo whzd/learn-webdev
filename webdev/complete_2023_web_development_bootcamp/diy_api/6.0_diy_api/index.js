@@ -10,20 +10,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //1. GET a random joke
 app.get("/random", (req, res) => {
-  res.send(jokes[Math.floor(Math.random() * jokes.length)])
+  res.json(jokes[Math.floor(Math.random() * jokes.length)])
 })
 
 //2. GET a specific joke
 app.get("/jokes/:id", (req, res) => {
-  res.send(jokes[req.params.id - 1])
+  res.json(jokes.find(joke => joke.id ===  parseInt(req.params.id)))
 })
 
 //3. GET a jokes by filtering on the joke type
 app.get("/filter", (req, res) => {
-  const filtered = jokes.filter(joke => {
-    return joke.jokeType === req.query.type
-  })
-  res.send(filtered)
+  res.json(jokes.filter(joke => joke.jokeType === req.query.type))
 })
 
 //4. POST a new joke
@@ -34,16 +31,56 @@ app.post("/jokes", (req, res) => {
     jokeType: req.body.jokeType
   }
   jokes.push(newJoke)
-  res.send(jokes[jokes.length - 1])
+  res.json(jokes[jokes.length - 1])
 })
 
 //5. PUT a joke
+app.put("/jokes/:id", (req, res) => {
+  const newJoke = {
+    id: parseInt(req.params.id),
+    jokeText: req.body.jokeText,
+    jokeType: req.body.jokeType
+  }
+  const oldJokeId = jokes.findIndex((joke) => joke.id === parseInt(req.params.id))
+  jokes[oldJokeId] = newJoke
+  res.json(jokes[newJoke.id - 1])
+})
 
 //6. PATCH a joke
+app.patch("/jokes/:id", (req, res) => {
+  const foundJoke = jokes.find(joke => joke.id === parseInt(req.params.id))
+  console.log(foundJoke)
+  const newJoke = {
+    id: parseInt(req.params.id),
+    jokeText: req.body.jokeText ? req.body.jokeText : foundJoke.jokeText,
+    jokeType: req.body.jokeType || foundJoke.jokeType
+  }
+  console.log(newJoke)
+  jokes[foundJoke.id - 1] = newJoke
+  res.json(jokes[newJoke.id - 1])
+})
 
 //7. DELETE Specific joke
+app.delete("/jokes/:id", (req, res) => {
+  const foundJokeId = jokes.findIndex(joke => joke.id === parseInt(req.params.id))
+  if (foundJokeId >= 0) {
+    jokes.splice(foundJokeId, 1)
+    res.sendStatus(200)
+  } else {
+    res.status(404).json({error: `Joke with id ${id} not found. No jokes were deleted.`})
+  }
+})
 
 //8. DELETE All jokes
+app.delete("/all", (req, res) => {
+  if (req.query.key === masterKey){
+    jokes.length = 0
+    res.sendStatus(200)
+  } else {
+    res.status(401).json({error: "ApiKey is invalid."})
+  }
+
+})
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
