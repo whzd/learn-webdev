@@ -1,0 +1,20 @@
+<%- include("partials/header.ejs") %>
+    <div id="heading" class="box"><h1><%- date.dow %>, <%- date.month %> <%- date.day %></h1> </div>
+    <div class="box">
+        <% tasks.forEach((task) => { %>
+            <div class="item">
+                <input type="checkbox">
+                <p class="strikethrough"><%= task.name %><p>
+            </div>
+            <hr>
+        <% }) %>
+        <div class="input">
+            <form action="/" method="POST">
+                <input type="text" name="newTask" placeholder="New Item" autocomplete="off">
+                <button type="submit">+</button>
+            </form>
+
+        </div>
+    </div>
+<%- include("partials/footer.ejs") %>
+
