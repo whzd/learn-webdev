@@ -98,6 +98,6 @@ button {
     border-width: 0;
 }
 
-form {
+.input > form {
     margin-left: 20px;
 }

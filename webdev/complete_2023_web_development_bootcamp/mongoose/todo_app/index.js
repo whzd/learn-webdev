@@ -1,3 +1,4 @@
+import _ from "lodash"
 import express from "express"
 import mongoose from "mongoose"
 import bodyParser from "body-parser"
@@ -19,18 +20,25 @@ const Item = mongoose.model(
 )
 
 const item1 = new Item ({
-  name: "Practice Guitar"
+  name: "Welcome to your todo list!"
 })
 
 const item2 = new Item ({
-  name: "Workout"
+  name: "Hit the + button to add a new item."
 })
 
 const item3 = new Item ({
-  name: "Pratice Chess"
+  name: "<-- Hit this to delete an item."
 })
 
-//Item.insertMany([item1, item2, item3])
+const defaultItems = [item1, item2, item3]
+
+const listSchema = {
+  name: String,
+  items: [itemsSchema]
+}
+
+const List = mongoose.model("List", listSchema)
 
 function getCurrentDate() {
   const options = {
@@ -58,27 +66,62 @@ app.get("/", async (req, res) => {
   res.render("index.ejs", data);
 });
 
-app.get("/work", (req, res) => {
-    const data = {
-        date: getCurrentDate(),
-        tasks: workTasks
+app.get("/:customListName", async (req, res) => {
+
+  const result = await List.findOne({name: _.capitalize(req.params.customListName)})
+
+  let data = {}
+  
+  if (!result){
+    const list = new List({
+      name: _.capitalize(req.params.customListName),
+      items: defaultItems
+    })
+    await list.save()
+    data = {
+      date: getCurrentDate(),
+      name: list.name,
+      tasks: list.items
     }
-    res.render("work.ejs", data);
+  } else{
+    data = {
+      date: getCurrentDate(),
+      name: result.name,
+      tasks: result.items
+    }
+  }
+
+  res.render("newList.ejs", data);
 });
 
-app.post("/", (req, res) => {
-    if(req.body.newTask){
-        dailyTasks.push(req.body.newTask)
+app.post("/", async (req, res) => {
+  if(req.body.newTask){
+    const newTask = new Item({
+      name: req.body.newTask
+    })
+    if(req.body.listName){
+      const list = await List.findOne({name: req.body.listName})
+      list.items.push(newTask)
+      list.save()
+      res.redirect("/" + req.body.listName)
+    } else {
+      newTask.save()
+      res.redirect("/")
     }
-    res.redirect("/")
+  }
 });
 
-app.post("/work", (req, res) => {
-    if(req.body.newTask){
-        workTasks.push(req.body.newTask)
+app.post("/remove", async (req, res) => {
+  if(req.body.doneTaskID){
+    if (req.body.listName){
+      await List.findOneAndUpdate({name: req.body.listName}, {$pull: {items: {_id: req.body.doneTaskID}}})
+      res.redirect("/" + req.body.listName)
+    } else {
+      await Item.findByIdAndRemove(req.body.doneTaskID)
+      res.redirect("/")
     }
-    res.redirect("/work")
-});
+  }
+})
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
