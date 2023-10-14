@@ -9,7 +9,7 @@ const port = 3000;
 app.use(express.static("public"))
 app.use(bodyParser.urlencoded({ extended: true }))
 
-mongoose.connect("mongodb://localhost:27017/todolistDB")
+mongoose.connect("mongodb+srv://mongo-master:IvUaHYwOuk155aPi@cluster0.frtkocd.mongodb.net/todolistDB")
 
 const itemsSchema = {
   name: String
@@ -58,10 +58,19 @@ function getCurrentDate() {
 }
 
 app.get("/", async (req, res) => {
-  const dailyTasks = await Item.find()
-  const data = {
+  const dailyTasks = await Item.find({})
+  let data = {}
+  if (dailyTasks.length === 0) {
+    await Item.insertMany(defaultItems)
+    data = {
+      date: getCurrentDate(),
+      tasks: defaultItems
+    }
+  } else {
+    data = {
       date: getCurrentDate(),
       tasks: dailyTasks
+    }
   }
   res.render("index.ejs", data);
 });
