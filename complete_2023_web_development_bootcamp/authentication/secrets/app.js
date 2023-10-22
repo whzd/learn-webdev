@@ -30,7 +30,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/userDB');
 const userSchema = new mongoose.Schema ({
   email: String,
   password: String,
-  googleId: String
+  googleId: String,
+  secret: String
 })
 
 userSchema.plugin(passportLocalMongoose)
@@ -43,14 +44,14 @@ passport.use(User.createStrategy())
 passport.serializeUser(function(user, cb) {
   process.nextTick(function() {
     return cb(null, {
-      id: user.id,
+      id: user._id,
       username: user.username,
-      picture: user.picture
     });
   });
 });
 
 passport.deserializeUser(function(user, cb) {
+  console.log(user)
   process.nextTick(function() {
     return cb(null, user);
   });
@@ -100,12 +101,9 @@ app.post("/login", (req, res) => {
   })
 })
 
-app.get("/secrets", (req, res) => {
-  if (req.isAuthenticated()){
-    res.render("secrets")
-  } else {
-    res.redirect("/login")
-  }
+app.get("/secrets", async (req, res) => {
+  const foundUsers = await User.find({secret: {$ne: null}})
+  res.render("secrets", { usersWithSecrets: foundUsers })
 })
 
 app.get("/register", (req, res) => {
@@ -123,6 +121,23 @@ app.post("/register", (req, res) => {
       })
     }
   })
+})
+
+app.get("/submit", (req, res) => {
+   if (req.isAuthenticated()){
+    res.render("submit")
+  } else {
+    res.redirect("/login")
+  }
+})
+
+app.post("/submit", async (req, res) => {
+  const foundUser = await User.findById(req.user.id)
+  if (foundUser){
+    foundUser.secret = req.body.secret
+    foundUser.save()
+    res.redirect("/secrets")
+  }
 })
 
 app.get("/logout", (req, res) => {
