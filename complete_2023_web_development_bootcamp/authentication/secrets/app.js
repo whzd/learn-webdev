@@ -5,6 +5,10 @@ import mongoose from "mongoose"
 import bodyParser from "body-parser"
 import session from "express-session"
 import passportLocalMongoose from "passport-local-mongoose"
+import findOrCreate from "mongoose-findorcreate"
+import passportGoogleOauth20 from "passport-google-oauth20"
+
+const GoogleStrategy = passportGoogleOauth20.Strategy;
 
 dotenv.config()
 const app = express()
@@ -25,20 +29,56 @@ mongoose.connect('mongodb://127.0.0.1:27017/userDB');
 
 const userSchema = new mongoose.Schema ({
   email: String,
-  password: String
+  password: String,
+  googleId: String
 })
 
 userSchema.plugin(passportLocalMongoose)
+userSchema.plugin(findOrCreate)
 
 const User = new mongoose.model("User", userSchema)
 
 passport.use(User.createStrategy())
 
-passport.serializeUser(User.serializeUser())
-passport.deserializeUser(User.deserializeUser())
+passport.serializeUser(function(user, cb) {
+  process.nextTick(function() {
+    return cb(null, {
+      id: user.id,
+      username: user.username,
+      picture: user.picture
+    });
+  });
+});
+
+passport.deserializeUser(function(user, cb) {
+  process.nextTick(function() {
+    return cb(null, user);
+  });
+});
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/secrets"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
 
 app.get("/", (req, res) => {
   res.render("home")
+})
+
+app.get("/auth/google", passport.authenticate("google", {scope: ["profile"]}))
+
+app.get("/auth/google/secrets",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  (req, res) => {
+    res.redirect("/secrets")
+
 })
 
 app.get("/login", (req, res) => {
@@ -83,7 +123,13 @@ app.post("/register", (req, res) => {
       })
     }
   })
+})
 
+app.get("/logout", (req, res) => {
+  req.logout( (err) => {
+    if (err) { console.log(err) }
+    res.redirect("/")
+  })
 })
 
 app.listen(port, () => {
