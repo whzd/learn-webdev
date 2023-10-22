@@ -1,10 +1,11 @@
-import md5 from "md5"
+import bcrypt from "bcrypt"
 import dotenv from "dotenv"
 import express from "express"
 import mongoose from "mongoose"
 import bodyParser from "body-parser"
 
 dotenv.config()
+const saltRounds = 10
 const app = express()
 const port = 3000;
 
@@ -31,8 +32,14 @@ app.get("/login", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const foundUser = await User.findOne({email: req.body.username})
-  if (foundUser && foundUser.password === md5(req.body.password)) {
-    res.render("secrets")
+  if (foundUser) {
+    bcrypt.compare(req.body.password, foundUser.password, (err, result) => {
+      if (result) {
+        res.render("secrets")
+      } else {
+        res.redirect("/login")
+      }
+    })
   } else {
     res.redirect("/login")
   }
@@ -42,14 +49,15 @@ app.get("/register", (req, res) => {
   res.render("register")
 })
 
-app.post("/register", async (req, res) => {
-  const newUser = new User({
-    email: req.body.username,
-    password: md5(req.body.password)
+app.post("/register", (req, res) => {
+  bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
+    const newUser = new User({
+      email: req.body.username,
+      password: hash
+    })
+    await newUser.save()
+    res.render("secrets")
   })
-
-  await newUser.save()
-  res.render("secrets")
 })
 
 app.listen(port, () => {
