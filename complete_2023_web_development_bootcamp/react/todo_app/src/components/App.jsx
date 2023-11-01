@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Item from "./Item"
 
 function App() {
 
@@ -12,6 +13,10 @@ function App() {
   function addItem() {
     setItemList([...itemList, item])
     setItem("")
+  }
+
+  function deleteItem(id) {
+    setItemList(itemList.filter((_, index) => index !== id))
   }
 
   return (
@@ -34,8 +39,8 @@ function App() {
       </div>
       <div>
         <ul>
-        {itemList.map( item => (
-          <li>{item}</li>
+        {itemList.map( (item, index) => (
+          <Item key={index} id={index} name={item} onChecked={deleteItem}/>
         ))}
         </ul>
       </div>
