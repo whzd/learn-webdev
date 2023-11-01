@@ -1,18 +1,13 @@
 import React, { useState } from "react";
 import Item from "./Item"
+import Input from "./Input"
 
 function App() {
 
-  const [ item, setItem ] = useState("")
   const [ itemList, setItemList ] = useState([])
 
-  function handleChange(event) {
-    setItem(event.target.value)
-  }
-  
-  function addItem() {
+  function addItem(item) {
     setItemList([...itemList, item])
-    setItem("")
   }
 
   function deleteItem(id) {
@@ -24,23 +19,16 @@ function App() {
       <div className="heading">
         <h1>To-Do List</h1>
       </div>
-      <div className="form">
-        <input 
-          onChange={handleChange} 
-          type="text"
-          value={item}
-        />
-        <button 
-          onClick={addItem}
-          type="button"
-        >
-          <span>Add</span>
-        </button>
-      </div>
+      <Input addItem={addItem}/>
       <div>
         <ul>
         {itemList.map( (item, index) => (
-          <Item key={index} id={index} name={item} onChecked={deleteItem}/>
+          <Item
+            key={index}
+            id={index}
+            name={item}
+            onChecked={deleteItem}
+          />
         ))}
         </ul>
       </div>
